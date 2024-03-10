@@ -1,3 +1,4 @@
+# t1060 给出一个有序数组 A，数组中的每个数字都是 独一无二的，找出从数组最左边开始的第 K 个缺失数字
 
 def KthMissingNumber(A, K):
     headNumber = A[0]
