@@ -170,3 +170,47 @@ class Solution:
         return max_distance
 '''
 
+### 网友解答
+class Solution:
+    def robotSim(self, commands: list[int], obstacles: list[list[int]]) -> int:
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # 北、东、南、西 （用字典类型，合适！）
+        x, y = 0, 0  # 机器人的当前位置
+        direction_index = 0  # 当前朝向的索引
+        max_distance = 0  # 最大欧式距离的平方
+        obstacle_set = set(map(tuple, obstacles))  # 将障碍物列表转换为集合，以便快速查找 (因为集合可以删掉重复元素?)
+
+        for cmd in commands:
+            if cmd == -2:  # 向左转 90 度
+                direction_index = (direction_index - 1) % 4  # （避免判断，比较巧妙！）
+            elif cmd == -1:  # 向右转 90 度
+                direction_index = (direction_index + 1) % 4
+            else:  # 向前移动 cmd 个单位
+                for _ in range(cmd):
+                    next_x, next_y = x + directions[direction_index][0], \
+                    y + directions[direction_index][1]
+                    if (next_x, next_y) in obstacle_set:  # 遇到障碍物，停止移动  （一小步小步走，同时判断障碍物）
+                        break                             # （后面赋值更新操作也无需执行，不更新位置，不计算距离平方）
+                    x, y = next_x, next_y  # 更新机器人的位置
+                    max_distance = max(max_distance, x**2 + y**2)  # 更新最大欧式距离的平方
+
+        return max_distance
+
+### 官方解答
+    
+class Solution:
+    def robotSim(self, commands: List[int], obstacles: List[List[int]]) -> int:
+        dirs = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+        px, py, d = 0, 0, 1
+        mp = set([tuple(i) for i in obstacles])   # 哈希表存储每一个障碍物放置点
+        res = 0
+        for c in commands:
+            if c < 0:
+                d += 1 if c == -1 else -1
+                d %= 4
+            else:
+                for i in range(c):
+                    if tuple([px + dirs[d][0], py + dirs[d][1]]) in mp:
+                        break
+                    px, py = px + dirs[d][0], py + dirs[d][1]
+                    res = max(res, px * px + py * py)
+        return res
