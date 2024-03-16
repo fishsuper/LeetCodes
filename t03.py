@@ -17,3 +17,46 @@ class Solution:
 ans = Solution()
 s = "pwwkew"
 print(ans.lengthOfLongestSubstring(s))
+
+# 解法2
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        if not s:
+            return 0
+        left = 0
+        right = 1
+        n = len(s)
+        if n==1:
+            return 1
+        else:
+            max_num = 0
+            while n!=1 and right<n:
+                if len(s[left:right])==len(set(s[left:right])):
+                    max_num = max(max_num,right-left)
+                    right += 1
+                    if right==n and len(s[left:right])==len(set(s[left:right])):
+                        max_num = max(max_num,right-left)
+                else:
+                    left += 1
+        return max_num
+        
+
+## 滑动窗口
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        if not s:return 0
+        left = 0
+        lookup = set()
+        n = len(s)
+        max_len = 0
+        cur_len = 0
+        for i in range(n):
+            cur_len += 1
+            while s[i] in lookup:
+                lookup.remove(s[left])
+                left += 1
+                cur_len -= 1
+            if cur_len > max_len:max_len = cur_len
+            lookup.add(s[i])
+        return max_len
+    
