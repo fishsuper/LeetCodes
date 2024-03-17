@@ -41,7 +41,7 @@ class Solution:
         return max_num
         
 
-## 滑动窗口
+## 滑动窗口（官方解答）
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         if not s:return 0
@@ -59,4 +59,19 @@ class Solution:
             if cur_len > max_len:max_len = cur_len
             lookup.add(s[i])
         return max_len
-    
+
+# 自己写的滑动窗口版本
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        if not s:
+            return 0
+        n = len(s)
+        max_length = 0
+        left = 0
+        for right in range(1,n+1):
+            if len(set(s[left:right]))==right-left:
+                max_length = max(max_length, right-left)
+            while len(set(s[left:right]))!=right-left:
+                left += 1
+        return max_length
